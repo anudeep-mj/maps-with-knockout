@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/style.css">
+    
+    
+    <style>
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+  <ul data-bind="foreach: locationList">
+          <li data-bind="text: title"></li>
+        </ul>
+    </ul>
+    <div class="container">
+      <div class="options-box">
+        <h1>Find Your Nearest places!</h1>
+        <div>
+          <label>Text box</label>
+          <input type = "text" id = "myText"/>
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+    <div id="map"></div>
+    
+    <script type=text/javascript src="js/lib/knockout-3.2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type=text/javascript src="js/app.js"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxIvcPCWWpRhLmNDdOxEFyXbN99Jni1nE&v=3&callback=initMap">
+    </script>
+  </body>
+</html>
