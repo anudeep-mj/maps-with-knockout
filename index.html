@@ -24,7 +24,7 @@
         <h1>Find Your Nearest places!</h1>
         <div>
           <ul data-bind="foreach: locationList">
-            <li data-bind="text: title"></li>
+            <li data-bind="text: title, click: $parent.setLocation"></li>
           </ul>
           <select data-bind="options: myObservableArray, value: selectedValue"></select>
         </div>
@@ -35,7 +35,6 @@
     
     <script type=text/javascript src="js/lib/knockout-3.2.0.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type=text/javascript src="js/app.js"></script>
     <div id="map"></div>
     <script>
       // var map;
@@ -54,5 +53,6 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxIvcPCWWpRhLmNDdOxEFyXbN99Jni1nE&v=3&callback=initMap">
     </script>
+    <script type=text/javascript src="js/app.js"></script>
   </body>
 </html>

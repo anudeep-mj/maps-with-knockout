@@ -8,25 +8,35 @@ var locations = [
 ];
 
 var map;
-var mmarker;
-var largeInfowindow;
+var markersArray = [];
+
 function initMap() {
     var i = 0;
     var self = this;
+    var bounds = new google.maps.LatLngBounds();
+    var largeInfowindow = new google.maps.InfoWindow();
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 40.7413549, lng: -73.9980244},
-        zoom: 13
+        zoom: 12
     });
 
     loc = {lat: 40.7713024, lng: -73.9632393};
 
     locations.forEach(function(locationItem) {
-    	largeInfowindow = new google.maps.InfoWindow();
     	var newMarker = initmarkers(locationItem.location)
+    	markersArray.push(newMarker);
+    	// newMarker.addListener('click', function() {
+     //        populateInfoWindow(this, largeInfowindow);
+     //    });
+
+    	bounds.extend(markersArray[i++].position);
     });
+
+    map.fitBounds(bounds);
 }
- 
+
+
 function initmarkers(location){
 	this.marker = new google.maps.Marker({
           position: location,
@@ -36,6 +46,13 @@ function initmarkers(location){
     });
 
     return this.marker;
+}
+
+function clearOverlays() {
+	for (var i = 0; i < markersArray.length; i++ ) {
+		markersArray[i].setMap(null);
+	}
+  markersArray.length = 0;
 }
 
 function populateInfoWindow(marker, infowindow) {
@@ -58,17 +75,62 @@ var viewModel = function() {
 	this.myObservableArray = ko.observableArray();
         
     self.selectedValue = ko.observable();
+    self.myObservableArray.push('Choose a marker');
+    self.myObservableArray.push('All');
+
 
 	locations.forEach(function(locationItem, map) {
 		self.locationList.push( new Location(locationItem)) ;
 		self.myObservableArray.push(locationItem.location);
 	});
 
-	self.selectedValue.subscribe(function(newValue) {
-     	//alert("The new value is " + newValue);
-     	//self.locationList([]);
-     	initmarkers(newValue)
+	self.selectedValue.subscribe(function(newValue) {	
+		if(newValue !== 'Choose a marker' && newValue !== 'All') {
+			clearOverlays();
+			marker = initmarkers(newValue);
+			markersArray.push(marker);
+		}
+
+		else if(newValue == 'All') {
+			clearOverlays();
+			locations.forEach(function(locationItem) {
+    			largeInfowindow = new google.maps.InfoWindow();
+    			var newMarker = initmarkers(locationItem.location)
+    			markersArray.push(newMarker);
+    		});
+		}
 	});
+
+	function currentLoc(loc) {
+		this.loc.addListener('click', function() {
+			populateInfoWindow(this, largeInfowindow);
+		})
+	}
+
+	this.setLocation = function(clickedLocation) {
+		var largeInfowindow = new google.maps.InfoWindow();
+		clearOverlays();
+		console.log(clickedLocation)
+		console.log(clickedLocation.title())
+		//console.log(clickedLocation.lat())
+		lateral = clickedLocation.lat();
+		lngtd = clickedLocation.lng();
+		loc = {lat: lateral, lng: lngtd};
+		console.log(loc);
+		var marker = new google.maps.Marker({
+            map: map,
+            position: loc,
+            title: clickedLocation.title(),
+            animation: google.maps.Animation.DROP,
+        });
+        marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+        });
+
+		//marker = initmarkers(loc);
+		//alert('yay')
+		//currentLoc(clickedLocation)
+	}
 }
 
 var Location = function(data) {
