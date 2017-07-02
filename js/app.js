@@ -64,11 +64,10 @@ var viewModel = function() {
 		self.myObservableArray.push(locationItem.location);
 	});
 
-	//self.selectedValue = ko.observable();
 	self.selectedValue.subscribe(function(newValue) {
-     	alert("The new value is " + newValue);
+     	//alert("The new value is " + newValue);
      	//self.locationList([]);
- //    	//initmarkers(newValue)
+     	initmarkers(newValue)
 	});
 }
 
