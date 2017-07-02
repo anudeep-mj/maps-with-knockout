@@ -123,6 +123,7 @@ var viewModel = function() {
             title: clickedLocation.title(),
             animation: google.maps.Animation.DROP,
         });
+        markersArray.push(marker);
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
