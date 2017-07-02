@@ -19,12 +19,12 @@ function initMap() {
         zoom: 13
     });
 
-    //loc = {lat: 40.7713024, lng: -73.9632393};
+    loc = {lat: 40.7713024, lng: -73.9632393};
 
-    // locations.forEach(function(locationItem) {
-    // 	largeInfowindow = new google.maps.InfoWindow();
-    // 	var newMarker = initmarkers(locationItem.location)
-    // });
+    locations.forEach(function(locationItem) {
+    	largeInfowindow = new google.maps.InfoWindow();
+    	var newMarker = initmarkers(locationItem.location)
+    });
 }
  
 function initmarkers(location){
@@ -68,6 +68,7 @@ var viewModel = function() {
 	self.selectedValue.subscribe(function(newValue) {
      	alert("The new value is " + newValue);
      	//self.locationList([]);
+ //    	//initmarkers(newValue)
 	});
 }
 
@@ -75,14 +76,13 @@ var Location = function(data) {
 	this.lat = ko.observable(data.location.lat);
 	this.lng = ko.observable(data.location.lng);
 	this.title = ko.observable(data.title);
-	//initmarkers(data.location);
-
-	this.marker = new google.maps.Marker({
-          position: data.location,
-          map: map,
-          title: data.title,
-          animation: google.maps.Animation.DROP,
-    });
+	//console.log(data.title);
+	// this.marker = new google.maps.Marker({
+ //          position: data.location,
+ //          map: map,
+ //          title: data.title,
+ //          animation: google.maps.Animation.DROP,
+ //    });
     // this.marker.addListener('click', function() {
     //     populateInfoWindow(this, largeInfowindow);
     // });
