@@ -32,11 +32,11 @@ function initMap() {
     });
 
     map.fitBounds(bounds);
-};
+}
 
 function googleError() {
     alert("Something went wrong! Google maps not loaded.");
-};
+}
 
 //Add bounce affect to a marker location
 function enableBounce(marker) {
@@ -47,7 +47,7 @@ function enableBounce(marker) {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     });
-};
+}
 
 //Returns a marker for a given location object
 function initmarkers(location) {
@@ -59,7 +59,7 @@ function initmarkers(location) {
     });
 
     return this.marker;
-};
+}
 
 //Initializes popup windows for the markers
 function initPopup(marker) {
@@ -67,7 +67,7 @@ function initPopup(marker) {
     marker.addListener('click', function () {
         populateInfoWindow(this, largeInfowindow);
     });
-};
+}
 
 //Clears all the markers
 function clearOverlays() {
@@ -75,7 +75,7 @@ function clearOverlays() {
         markersArray[i].setMap(null);
     }
     markersArray.length = 0;
-};
+}
 
 function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
@@ -88,7 +88,7 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.setMarker = null;
         });
     }
-};
+}
 
 var viewModel = function () {
     var self = this;
@@ -157,7 +157,7 @@ var viewModel = function () {
                 for (var i = 0; i < articles.length; i++) {
                     var article = articles[i];
                     self.articleList.push({url: article.web_url, headline: article.headline.main});
-                };
+                }
             }).error(function () {
                 alert("Something went wrong!");
             });
