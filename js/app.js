@@ -162,7 +162,7 @@ var viewModel = function () {
                 ;
                 console.log(self.articleList());
             }).error(function () {
-                self.articleList.push("Something went wrong!");
+                alert("Something went wrong!");
             });
         }
         tempfunc();
