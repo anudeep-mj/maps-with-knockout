@@ -138,7 +138,6 @@ var viewModel = function () {
         lateral = clickedLocation.lat();
         lngtd = clickedLocation.lng();
         loc = {lat: lateral, lng: lngtd};
-        console.log(loc);
         var marker = new google.maps.Marker({
             map: map,
             position: loc,
