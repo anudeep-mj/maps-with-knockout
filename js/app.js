@@ -75,23 +75,32 @@ var viewModel = function() {
 	this.myObservableArray = ko.observableArray();
         
     self.selectedValue = ko.observable();
-    self.myObservableArray.push('Choose a marker');
-    self.myObservableArray.push('All');
+    self.myObservableArray.push({title: 'Choose a marker'});
+    self.myObservableArray.push({title: 'All'});
 
 
 	locations.forEach(function(locationItem, map) {
 		self.locationList.push( new Location(locationItem)) ;
-		self.myObservableArray.push(locationItem.location);
+		// self.myObservableArray.push(locationItem.location);
+		self.myObservableArray.push(new Location(locationItem));
 	});
 
-	self.selectedValue.subscribe(function(newValue) {	
-		if(newValue !== 'Choose a marker' && newValue !== 'All') {
+	self.selectedValue.subscribe(function(newValue) {
+		//console.log(newValue.title());
+			
+		//title = newValue.title();
+		console.log(newValue);
+		if(newValue.title !== 'Choose a marker' && newValue.title !== 'All') {
+			lateral = newValue.lat();
+			lngtd = newValue.lng();
+			title = newValue.title();
+			newValue = {lat: lateral, lng: lngtd};
 			clearOverlays();
 			marker = initmarkers(newValue);
 			markersArray.push(marker);
 		}
 
-		else if(newValue == 'All') {
+		else if(newValue.title == 'All') {
 			clearOverlays();
 			locations.forEach(function(locationItem) {
     			largeInfowindow = new google.maps.InfoWindow();
