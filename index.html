@@ -2,56 +2,34 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/style.css">
-    
-    
-    <style>
-      html,
-      body {
-        font-family: Arial, sans-serif;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #map {
-        height: 100%;
-      }
-    </style>
   </head>
   <body>
     <div class="container">
       <div class="options-box">
-        <h1>Find Your Nearest places!</h1>
         <div>
+        <font font size="2">Filter Location:</font>
+         <select data-bind="options: myObservableArray, optionsText: 'title', value: selectedValue"></select>
+         <br/>
+          <strong>All locations:</strong>
           <ul data-bind="foreach: locationList">
             <li data-bind="text: title, click: $parent.setLocation"></li>
           </ul>
-          <select data-bind="options: myObservableArray, optionsText: 'title', value: selectedValue"></select>
         </div>
-      </div>
+        <h3>Related New York Articles!</h3>
+        <div id="dialog-window">
+        <div id="scrollable-content">
+        <ul data-bind="foreach: articleList">
+          <li><a data-bind="attr: { href: url}, text: headline"></a></li>
+        </ul>
+        </div>
+        </div>
       <div id="map"></div>
+      </div>
     </div>
-    <div id="map"></div>
-    
     <script type=text/javascript src="js/lib/knockout-3.2.0.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <div id="map"></div>
-    <script>
-      // var map;
-      // function initMap() {
-      //   largeInfowindow = new google.maps.InfoWindow();
-      //   map = new google.maps.Map(document.getElementById('map'), {
-      //     center: {lat: 40.7413549, lng: -73.9980244},
-      //     zoom: 13
-      //   });
-      //   locations.forEach(function(locationItem) {
-      //     var newMarker = initmarkers(locationItem.location)
-      //   });
-      //   viewModel();
-      // }
-    </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxIvcPCWWpRhLmNDdOxEFyXbN99Jni1nE&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxIvcPCWWpRhLmNDdOxEFyXbN99Jni1nE&v=3&callback=initMap" onerror="googleError()">
     </script>
     <script type=text/javascript src="js/app.js"></script>
   </body>
