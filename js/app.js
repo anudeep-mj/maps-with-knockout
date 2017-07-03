@@ -23,7 +23,7 @@ function initMap() {
     loc = {lat: 40.7713024, lng: -73.9632393};
 
     locations.forEach(function (locationItem) {
-        var newMarker = initmarkers(locationItem)
+        var newMarker = initmarkers(locationItem);
         markersArray.push(newMarker);
         initPopup(newMarker);
         enableBounce(newMarker);
@@ -32,7 +32,7 @@ function initMap() {
     });
 
     map.fitBounds(bounds);
-}
+};
 
 function googleError() {
     alert("Something went wrong! Google maps not loaded.");
@@ -47,7 +47,7 @@ function enableBounce(marker) {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     });
-}
+};
 
 //Returns a marker for a given location object
 function initmarkers(location) {
@@ -59,7 +59,7 @@ function initmarkers(location) {
     });
 
     return this.marker;
-}
+};
 
 //Initializes popup windows for the markers
 function initPopup(marker) {
@@ -67,7 +67,7 @@ function initPopup(marker) {
     marker.addListener('click', function () {
         populateInfoWindow(this, largeInfowindow);
     });
-}
+};
 
 //Clears all the markers
 function clearOverlays() {
@@ -75,7 +75,7 @@ function clearOverlays() {
         markersArray[i].setMap(null);
     }
     markersArray.length = 0;
-}
+};
 
 function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
@@ -88,7 +88,7 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.setMarker = null;
         });
     }
-}
+};
 
 var viewModel = function () {
     var self = this;
@@ -124,7 +124,7 @@ var viewModel = function () {
             clearOverlays();
             locations.forEach(function (locationItem) {
                 largeInfowindow = new google.maps.InfoWindow();
-                var newMarker = initmarkers(locationItem)
+                var newMarker = initmarkers(locationItem);
                 initPopup(newMarker);
                 enableBounce(newMarker);
                 markersArray.push(newMarker);
@@ -156,25 +156,23 @@ var viewModel = function () {
             $.getJSON(nytimeurl, function (data) {
                 articles = data.response.docs;
                 for (var i = 0; i < articles.length; i++) {
-                    var article = articles[i]
+                    var article = articles[i];
                     self.articleList.push({url: article.web_url, headline: article.headline.main});
-                }
-                ;
-                console.log(self.articleList());
+                };
             }).error(function () {
                 alert("Something went wrong!");
             });
-        }
+        };
         tempfunc();
         self.articleList([]);
-    }
-}
+    };
+};
 
 var Location = function (data) {
     this.lat = ko.observable(data.location.lat);
     this.lng = ko.observable(data.location.lng);
     this.title = ko.observable(data.title);
-}
+};
 
 
 ko.applyBindings(new viewModel());
