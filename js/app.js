@@ -90,7 +90,7 @@ function populateInfoWindow(marker, infowindow, locationItem) {
                 list = '<a href="' + article.web_url + '"">' + article.headline.main + '</a><br/>';
                 fullList = fullList + list;
             }
-            infowindow.setContent(fullList)
+            infowindow.setContent(fullList);
 
         }).error(function () {
             alert("Something went wrong!");
