@@ -10,6 +10,11 @@ var locations = [
 var map;
 var markersArray = [];
 
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+});
+
 function initMap() {
     var i = 0;
     var self = this;
@@ -40,11 +45,10 @@ function googleError() {
 //Add bounce affect to a marker location
 function enableBounce(marker) {
     marker.addListener('click', function () {
-        if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-        } else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+            setTimeout(function() {
+                marker.setAnimation(null)
+            }, 2000);
     });
 }
 
@@ -60,6 +64,10 @@ function initmarkers(location) {
     return marker;
 }
 
+function setMarkerInvisible(marker) {
+    marker.setVisbile(false);
+}
+
 //Initializes popup windows for the markers
 function initPopup(marker, locationItem) {
     var largeInfowindow = new google.maps.InfoWindow();
@@ -69,9 +77,9 @@ function initPopup(marker, locationItem) {
 }
 
 //Clears all the markers
-function clearOverlays() {
+function setMarkersInvisible() {
     for (var i = 0; i < markersArray.length; i++) {
-        markersArray[i].setMap(null);
+        markersArray[i].setVisible(false);
     }
     markersArray.length = 0;
 }
@@ -109,6 +117,7 @@ var viewModel = function () {
     var self = this;
     var i = 0;
     this.locationList = ko.observableArray([]);
+    this.filteredLocationList = ko.observableArray([]);
     this.myObservableArray = ko.observableArray();
     self.articleList = ko.observableArray();
 
@@ -120,6 +129,7 @@ var viewModel = function () {
 
     locations.forEach(function (locationItem, map) {
         self.locationList.push(new Location(locationItem));
+        self.filteredLocationList.push(new Location(locationItem));
         self.myObservableArray.push(new Location(locationItem));
     });
 
@@ -129,8 +139,13 @@ var viewModel = function () {
             lateral = newValue.lat();
             lngtd = newValue.lng();
             title = newValue.title();
+            
+            self.filteredLocationList([]);
+            self.articleList([]);
+            self.filteredLocationList.push(new Location({title: newValue.title(), location: {lat:newValue.lat(), lng:newValue.lng()}}));
+            
             newValue = {lat: lateral, lng: lngtd};
-            clearOverlays();
+            setMarkersInvisible();
             marker = initmarkers({title: title, location: newValue});
             initPopup(marker, {title: title, location: newValue});
             enableBounce(marker);
@@ -138,20 +153,23 @@ var viewModel = function () {
         }
 
         else if (newValue.title == 'All') {
-            clearOverlays();
+            setMarkersInvisible();
+            self.filteredLocationList([]);
             locations.forEach(function (locationItem) {
                 largeInfowindow = new google.maps.InfoWindow();
                 var newMarker = initmarkers(locationItem);
                 initPopup(newMarker, locationItem);
                 enableBounce(newMarker);
                 markersArray.push(newMarker);
+                self.filteredLocationList.push(new Location(locationItem));
             });
+
         }
     });
 
     this.setLocation = function (clickedLocation) {
         var largeInfowindow = new google.maps.InfoWindow();
-        clearOverlays();
+        setMarkersInvisible();
         lateral = clickedLocation.lat();
         lngtd = clickedLocation.lng();
         loc = {lat: lateral, lng: lngtd};
