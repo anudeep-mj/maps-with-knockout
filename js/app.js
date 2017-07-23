@@ -132,7 +132,7 @@ var viewModel = function () {
             newValue = {lat: lateral, lng: lngtd};
             clearOverlays();
             marker = initmarkers({title: title, location: newValue});
-            initPopup(marker);
+            initPopup(marker, {title: title, location: newValue});
             enableBounce(marker);
             markersArray.push(marker);
         }
@@ -142,7 +142,7 @@ var viewModel = function () {
             locations.forEach(function (locationItem) {
                 largeInfowindow = new google.maps.InfoWindow();
                 var newMarker = initmarkers(locationItem);
-                initPopup(newMarker);
+                initPopup(newMarker, locationItem);
                 enableBounce(newMarker);
                 markersArray.push(newMarker);
             });
@@ -164,7 +164,7 @@ var viewModel = function () {
         markersArray.push(marker);
         enableBounce(marker);
         marker.addListener('click', function () {
-            populateInfoWindow(this, largeInfowindow);
+            populateInfoWindow(this, largeInfowindow, {title: clickedLocation.title()});
         });
 
         tempfunc = function () {
