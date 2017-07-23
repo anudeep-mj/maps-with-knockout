@@ -9,7 +9,6 @@ var locations = [
 
 var map;
 var markersArray = [];
-var markerMap = [];
 
 $("#menu-toggle").click(function(e) {
     e.preventDefault();
@@ -31,7 +30,6 @@ function initMap() {
     locations.forEach(function (locationItem) {
         var newMarker = initmarkers(locationItem);
         markersArray.push(newMarker);
-        //markerMap.push({title: marker.title, marker: marker});
         initPopup(newMarker, locationItem);
         enableBounce(newMarker);
         bounds.extend(markersArray[i++].position);
