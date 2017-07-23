@@ -168,6 +168,7 @@ var viewModel = function () {
                 enableBounce(newMarker);
                 self.filteredLocationList.push(new Location(locationItem));
             });
+
         }
     });
 
@@ -179,6 +180,21 @@ var viewModel = function () {
         loc = {lat: lateral, lng: lngtd};
         marker = setMarkerVisible(clickedLocation.title());
         enableBounce(marker);
+
+        tempfunc = function () {
+            var nytimeurl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + clickedLocation.title() + '&sort=newest&api-key=dfb69fab279a46ce8919e44988a3db76';
+            $.getJSON(nytimeurl, function (data) {
+                articles = data.response.docs;
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    self.articleList.push({url: article.web_url, headline: article.headline.main});
+                }
+            }).error(function () {
+                alert("Something went wrong!");
+            });
+        };
+        tempfunc();
+        self.articleList([]);
     };
 
 };
