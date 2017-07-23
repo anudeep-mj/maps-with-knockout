@@ -88,9 +88,6 @@ function setMarkerVisible(title) {
         if(markersArray[i].title == title) {
             markersArray[i].setVisible(true);
             markersArray[i].setAnimation(google.maps.Animation.DROP);
-            setTimeout(function() {
-                markersArray[i].setAnimation(null);
-            }, 1400);
             return markersArray[i];
         }
     }
