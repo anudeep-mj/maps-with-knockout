@@ -86,7 +86,6 @@ function setMarkersInvisible() {
 }
 
 function setMarkerVisible(title) {
-    console.log(markersArray);
     for (var i = 0; i < markersArray.length; i++) {
         if(markersArray[i].title == title) {
             markersArray[i].setVisible(true);
