@@ -9,6 +9,7 @@ var locations = [
 
 var map;
 var markersArray = [];
+var markerMap = [];
 
 $("#menu-toggle").click(function(e) {
     e.preventDefault();
@@ -30,6 +31,7 @@ function initMap() {
     locations.forEach(function (locationItem) {
         var newMarker = initmarkers(locationItem);
         markersArray.push(newMarker);
+        //markerMap.push({title: marker.title, marker: marker});
         initPopup(newMarker, locationItem);
         enableBounce(newMarker);
         bounds.extend(markersArray[i++].position);
@@ -48,7 +50,7 @@ function enableBounce(marker) {
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
                 marker.setAnimation(null);
-            }, 2000);
+            }, 1400);
     });
 }
 
@@ -81,7 +83,16 @@ function setMarkersInvisible() {
     for (var i = 0; i < markersArray.length; i++) {
         markersArray[i].setVisible(false);
     }
-    markersArray.length = 0;
+}
+
+function setMarkerVisible(title) {
+    console.log(markersArray);
+    for (var i = 0; i < markersArray.length; i++) {
+        if(markersArray[i].title == title) {
+            markersArray[i].setVisible(true);
+            return markersArray[i];
+        }
+    }
 }
 
 function populateInfoWindow(marker, infowindow, locationItem) {
@@ -146,10 +157,9 @@ var viewModel = function () {
             
             newValue = {lat: lateral, lng: lngtd};
             setMarkersInvisible();
-            marker = initmarkers({title: title, location: newValue});
+            marker = setMarkerVisible(title);
             initPopup(marker, {title: title, location: newValue});
             enableBounce(marker);
-            markersArray.push(marker);
         }
 
         else if (newValue.title == 'All') {
@@ -157,10 +167,9 @@ var viewModel = function () {
             self.filteredLocationList([]);
             locations.forEach(function (locationItem) {
                 largeInfowindow = new google.maps.InfoWindow();
-                var newMarker = initmarkers(locationItem);
+                var newMarker = setMarkerVisible(locationItem.title);
                 initPopup(newMarker, locationItem);
                 enableBounce(newMarker);
-                markersArray.push(newMarker);
                 self.filteredLocationList.push(new Location(locationItem));
             });
 
@@ -173,13 +182,7 @@ var viewModel = function () {
         lateral = clickedLocation.lat();
         lngtd = clickedLocation.lng();
         loc = {lat: lateral, lng: lngtd};
-        var marker = new google.maps.Marker({
-            map: map,
-            position: loc,
-            title: clickedLocation.title(),
-            animation: google.maps.Animation.DROP,
-        });
-        markersArray.push(marker);
+        marker = setMarkerVisible(clickedLocation.title());
         enableBounce(marker);
         marker.addListener('click', function () {
             populateInfoWindow(this, largeInfowindow, {title: clickedLocation.title()});
