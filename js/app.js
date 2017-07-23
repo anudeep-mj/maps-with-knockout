@@ -25,9 +25,8 @@ function initMap() {
     locations.forEach(function (locationItem) {
         var newMarker = initmarkers(locationItem);
         markersArray.push(newMarker);
-        initPopup(newMarker);
+        initPopup(newMarker, locationItem);
         enableBounce(newMarker);
-
         bounds.extend(markersArray[i++].position);
     });
 
@@ -51,21 +50,21 @@ function enableBounce(marker) {
 
 //Returns a marker for a given location object
 function initmarkers(location) {
-    this.marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
         position: location.location,
         map: map,
         title: location.title,
         animation: google.maps.Animation.DROP,
     });
 
-    return this.marker;
+    return marker;
 }
 
 //Initializes popup windows for the markers
-function initPopup(marker) {
+function initPopup(marker, locationItem) {
     var largeInfowindow = new google.maps.InfoWindow();
     marker.addListener('click', function () {
-        populateInfoWindow(this, largeInfowindow);
+        populateInfoWindow(this, largeInfowindow, locationItem);
     });
 }
 
@@ -77,11 +76,27 @@ function clearOverlays() {
     markersArray.length = 0;
 }
 
-function populateInfoWindow(marker, infowindow) {
+function populateInfoWindow(marker, infowindow, locationItem) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
+        var list;
+        var fullList = '<div>' + marker.title + '</div><br/><strong>Related NY Times Articles:</strong><br/>';
+        var nytimeurl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + locationItem.title + '&sort=newest&api-key=dfb69fab279a46ce8919e44988a3db76';
+        $.getJSON(nytimeurl, function (data) {
+            articles = data.response.docs;
+            for (var i = 0; i < articles.length; i++) {
+                var article = articles[i];
+                list = '<a href="' + article.web_url + '"">' + article.headline.main + '</a><br/>';
+                fullList = fullList + list;
+            }
+            infowindow.setContent(fullList)
+
+        }).error(function () {
+            alert("Something went wrong!");
+        });
+
+
         infowindow.open(map, marker);
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function () {
@@ -97,6 +112,7 @@ var viewModel = function () {
     this.myObservableArray = ko.observableArray();
     self.articleList = ko.observableArray();
 
+
     self.selectedValue = ko.observable();
     self.myObservableArray.push({title: 'Choose a marker'});
     self.myObservableArray.push({title: 'All'});
@@ -106,6 +122,7 @@ var viewModel = function () {
         self.locationList.push(new Location(locationItem));
         self.myObservableArray.push(new Location(locationItem));
     });
+
 
     self.selectedValue.subscribe(function (newValue) {
         if (newValue.title !== 'Choose a marker' && newValue.title !== 'All') {
@@ -165,6 +182,7 @@ var viewModel = function () {
         tempfunc();
         self.articleList([]);
     };
+
 };
 
 var Location = function (data) {
