@@ -45,10 +45,10 @@ function googleError() {
 //Add bounce affect to a marker location
 function enableBounce(marker) {
     marker.addListener('click', function () {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() {
-                marker.setAnimation(null);
-            }, 1400);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null);
+        }, 1400);
     });
 }
 
@@ -87,6 +87,10 @@ function setMarkerVisible(title) {
     for (var i = 0; i < markersArray.length; i++) {
         if(markersArray[i].title == title) {
             markersArray[i].setVisible(true);
+            markersArray[i].setAnimation(google.maps.Animation.DROP);
+            setTimeout(function() {
+                markersArray[i].setAnimation(null);
+            }, 1400);
             return markersArray[i];
         }
     }
@@ -155,7 +159,6 @@ var viewModel = function () {
             newValue = {lat: lateral, lng: lngtd};
             setMarkersInvisible();
             marker = setMarkerVisible(title);
-            initPopup(marker, {title: title, location: newValue});
             enableBounce(marker);
         }
 
@@ -165,11 +168,9 @@ var viewModel = function () {
             locations.forEach(function (locationItem) {
                 largeInfowindow = new google.maps.InfoWindow();
                 var newMarker = setMarkerVisible(locationItem.title);
-                initPopup(newMarker, locationItem);
                 enableBounce(newMarker);
                 self.filteredLocationList.push(new Location(locationItem));
             });
-
         }
     });
 
@@ -181,24 +182,6 @@ var viewModel = function () {
         loc = {lat: lateral, lng: lngtd};
         marker = setMarkerVisible(clickedLocation.title());
         enableBounce(marker);
-        marker.addListener('click', function () {
-            populateInfoWindow(this, largeInfowindow, {title: clickedLocation.title()});
-        });
-
-        tempfunc = function () {
-            var nytimeurl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + clickedLocation.title() + '&sort=newest&api-key=dfb69fab279a46ce8919e44988a3db76';
-            $.getJSON(nytimeurl, function (data) {
-                articles = data.response.docs;
-                for (var i = 0; i < articles.length; i++) {
-                    var article = articles[i];
-                    self.articleList.push({url: article.web_url, headline: article.headline.main});
-                }
-            }).error(function () {
-                alert("Something went wrong!");
-            });
-        };
-        tempfunc();
-        self.articleList([]);
     };
 
 };
