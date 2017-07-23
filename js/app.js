@@ -47,7 +47,7 @@ function enableBounce(marker) {
     marker.addListener('click', function () {
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
-                marker.setAnimation(null)
+                marker.setAnimation(null);
             }, 2000);
     });
 }
